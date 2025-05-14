@@ -230,23 +230,130 @@ impl Drawable for Triangle {
     }
 }
 
-// pub struct Circle {
-//     center: Point,
-//     radius: i32,
-// }
+pub struct Circle {
+    center: Point,
+    radius: i32,
+}
 
-// impl Circle {
-//     pub fn new(center: &Point, radius: i32) -> Self {
-//         Self {
-//             center: *center,
-//             radius,
-//         }
-//     }
+impl Circle {
+    pub fn new(center: &Point, radius: i32) -> Self {
+        Self {
+            center: *center,
+            radius,
+        }
+    }
 
-//     pub fn random(width: i32, height: i32) -> Self {
-//         let center: Point = Point::random(width, height);
-//         let mut rng = rand::rng();
-//         let radius: i32 = rng.random_range(1..=height / 2);
-//         Self::new(&center, radius)
-//     }
-// }
+    pub fn random(width: i32, height: i32) -> Self {
+        let center: Point = Point::random(width, height);
+        let mut rng = rand::rng();
+        let radius: i32 = rng.random_range(1..=height / 2);
+        Self::new(&center, radius)
+    }
+}
+
+impl Drawable for Circle {
+    fn draw(&self, image: &mut Image) {
+        let Point(cx, cy) = self.center;
+
+        let color = Self::color();
+
+        let mut x = 0;
+        let mut y = -self.radius;
+        while x < -y {
+            if (x * x) as f32 + (y as f32 + 0.5) * (y as f32 + 0.5)
+                > (self.radius * &self.radius) as f32
+            {
+                y += 1
+            }
+            image.display(
+                cx + x,
+                cy + y,
+                Color {
+                    r: color.r,
+                    g: color.g,
+                    b: color.b,
+                    a: color.a,
+                },
+            );
+
+            image.display(
+                cx - x,
+                cy + y,
+                Color {
+                    r: color.r,
+                    g: color.g,
+                    b: color.b,
+                    a: color.a,
+                },
+            );
+
+            image.display(
+                cx + x,
+                cy - y,
+                Color {
+                    r: color.r,
+                    g: color.g,
+                    b: color.b,
+                    a: color.a,
+                },
+            );
+
+            image.display(
+                cx - x,
+                cy - y,
+                Color {
+                    r: color.r,
+                    g: color.g,
+                    b: color.b,
+                    a: color.a,
+                },
+            );
+
+            image.display(
+                cx + y,
+                cy + x,
+                Color {
+                    r: color.r,
+                    g: color.g,
+                    b: color.b,
+                    a: color.a,
+                },
+            );
+
+            image.display(
+                cx - y,
+                cy + x,
+                Color {
+                    r: color.r,
+                    g: color.g,
+                    b: color.b,
+                    a: color.a,
+                },
+            );
+
+            image.display(
+                cx + y,
+                cy - x,
+                Color {
+                    r: color.r,
+                    g: color.g,
+                    b: color.b,
+                    a: color.a,
+                },
+            );
+
+            image.display(
+                cx - y,
+                cy - x,
+                Color {
+                    r: color.r,
+                    g: color.g,
+                    b: color.b,
+                    a: color.a,
+                },
+            );
+
+            x += 1
+        }
+    }
+}
